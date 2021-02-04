@@ -1,0 +1,55 @@
+MODEL:
+  META_ARCHITECTURE: Baseline
+
+  PIXEL_MEAN: [127.5, 127.5, 127.5]
+  PIXEL_STD: [127.5, 127.5, 127.5]
+
+  BACKBONE:
+    NAME: resnet
+    DEPTH: 50
+    FEAT_DIM: 512
+
+  HEADS:
+    NAME: EmbeddingHead
+    EMBEDDING_DIM: 512
+    CLS_LAYER: circleSoftmax
+    SCALE: 64
+    MARGIN: 0.5
+
+  LOSSES:
+    NAME: ("CrossEntropyLoss", )
+
+    CE:
+      EPSILON: 0.
+      SCALE: 1.
+    
+    TRI:
+      MARGIN: 0.3
+      HARD_MINING: True
+      NORM_FEAT: False
+      SCALE: 1.
+
+SOLVER:
+  MAX_EPOCH: 20
+  FP16_ENABLED: False
+
+  OPT: SGD
+  BASE_LR: 1e-3
+  MOMENTUM: 0.9
+  WEIGHT_DECAY: 0.0005
+
+  IMS_PER_BATCH: 96
+
+TEST:
+  EVAL_PERIOD: 1000
+  SAVE_PERIOD: 10000
+  SHOW_PERIOD: 100
+  MODE: "no"
+
+DATASETS:
+  FOLDER: "/workspace/jiangby/project/datasets/asian_face/"
+
+CHECKPOINT: 
+  SAVE_DIR: checkpoints/
+  RESTORE: False
+  RESTORE_MODEL: model_2021-02-03-05-53_accuracy:0.6232857142857142_step:10000.pth
